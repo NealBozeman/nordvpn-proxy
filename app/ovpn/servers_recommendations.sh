@@ -46,11 +46,11 @@ if [[ ! -v SERVER ]]; then
 # Otherwise, use the server that was specified
 else
     echo "$(adddate) INFO: SERVER has been set to ${SERVER^^}"
-    curl --silent https://api.nordvpn.com/server | jq '.[] | select(.domain == '\"$SERVER\"')' > $JSON_FILE
+    curl --silent https://api.nordvpn.com/server | jq '.[] | select(.domain == '\"$SERVER\"')' > $JSON_FILE || true
 
     #Set vars
     export SERVERNAME="$(jq -r '.name' $JSON_FILE)"
-    export LOAD=$(curl -s $SERVER_STATS_URL$SERVER | jq -r '.[]')
+    export LOAD=$(curl -s $SERVER_STATS_URL$SERVER | jq -r '.[]') || true
     export UPDATED_AT=""
     export IP="$(jq -r '.ip_address' $JSON_FILE)"
     echo "$SERVER" > /tmp/nordvpn_hostname
